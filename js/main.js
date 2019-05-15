@@ -1,5 +1,9 @@
 /* Main script */
 
+window.toId = function (text) {
+    return (text + "").toLowerCase().replace(/[^a-z0-9]/g, "");
+}
+
 document.addEventListener("DOMContentLoaded", function (event) {
     //Width and height
     var w = 700;
@@ -7,11 +11,11 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
     //Define map projection
     var projection = d3.geoMercator()
-        .scale(1700)
+        .scale(2000)
         .center([0, 39])
 
     var projection2 = d3.geoMercator()
-        .scale(1700)
+        .scale(2000)
         .center([-5, 33])
 
     //Define path generator

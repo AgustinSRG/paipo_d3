@@ -1,7 +1,7 @@
 /* Main style */
 
 body {
-    background: #f0f0f0;
+    background: white;
 }
 
 
@@ -10,10 +10,13 @@ body {
 }
 
 .main-title {
-    text-align: center;
-    padding: 0.5rem;
-    border-bottom: solid 1px black;
-    margin: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: auto;
+    height: 3.5rem;
+    font-size: 2rem;
 }
 
 
@@ -33,89 +36,43 @@ body {
 
 /* Structure of containers */
 
-@media(orientation: landscape) {
-    .map-container {
-        position: fixed;
-        top: 0;
-        bottom: 50%;
-        left: 0;
-        right: 50%;
-        width: auto;
-    }
-    
-    .controls-container {
-        position: fixed;
-        top: 0;
-        right: 0;
-        left: 50%;
-        width: auto;
-        bottom: 50%;
-        height: auto;
-    }
-    
-    .sectors-graph-container {
-        position: fixed;
-        top: 50%;
-        bottom: 0;
-        height: auto;
-        left: 0;
-        right: 50%;
-        width: auto;
-    }
-    
-    .genders-graph-container {
-        position: fixed;
-        bottom: 0;
-        right: 0;
-        left: 50%;
-        width: auto;
-        top: 50%;
-        height: auto;
-    }
+.map-container {
+    position: fixed;
+    top: 4rem;
+    bottom: 4rem;
+    left: 0;
+    right: 50%;
+    width: auto;
 }
 
-@media(orientation: portrait) {
-    .map-container {
-        position: fixed;
-        top: 0;
-        bottom: 60%;
-        left: 0;
-        right: 0;
-        width: auto;
-    }
-    
-    .controls-container {
-        position: fixed;
-        top: 40%;
-        bottom: 30%;
-        height: auto;
-        left: 0;
-        right: 0;
-        width: auto;
-    }
-    
-    .sectors-graph-container {
-        position: fixed;
-        top: 70%;
-        right: 50%;
-        left: 0;
-        width: auto;
-        bottom: 0;
-        height: auto;
-    }
-    
-    .genders-graph-container {
-        position: fixed;
-        bottom: 0;
-        right: 0;
-        left: 50%;
-        width: auto;
-        top: 70%;
-        height: auto;
-    }
+.controls-container {
+    position: fixed;
+    right: 0;
+    left: 0;
+    width: auto;
+    bottom: 0;
+    height: 4rem;
 }
 
-/* 
+.bars-graph-container {
+    position: fixed;
+    top: 4rem;
+    bottom: 50%;
+    height: auto;
+    left: 50%;
+    right: 0;
+    width: auto;
+}
+
+.pie-graph-container {
+    position: fixed;
+    bottom: 4rem;
+    right: 0;
+    left: 50%;
+    width: auto;
+    top: 50%;
+    height: auto;
+}
 
 /* svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet" */
 
@@ -127,6 +84,15 @@ body {
     right: 0.5rem;
     width: calc(100% - 1rem);
     height: calc(100% - 1rem);
-    border: dashed black 1px;
-    background-color: #C2EAFF;
+    background-color: #f0f0f0;
+    border-radius: 1rem;
+}
+
+.controls-container form {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0.5rem;
+    right: 0.5rem;
+    padding-top: 0.2rem;
 }
