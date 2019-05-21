@@ -15,10 +15,12 @@ body {
     left: 0;
     right: 0;
     width: auto;
-    height: 3.5rem;
     font-size: 2rem;
 }
 
+.btn-margin {
+    margin: 0 0.5rem;
+}
 
 .controls-container {
     display: flex;
@@ -138,4 +140,67 @@ body {
     left: 0.5rem;
     right: 0.5rem;
     padding-top: 0.2rem;
+}
+
+@media(max-width: 750px) {
+    .dropdown {
+        display: none !important;
+    }
+}
+
+.dropdown-menu {
+    -webkit-animation: fadeInFromNone 0.1s ease-out;
+    -moz-animation: fadeInFromNone 0.1s ease-out;
+    -o-animation: fadeInFromNone 0.1s ease-out;
+    animation: fadeInFromNone 0.1s ease-out;
+}
+
+.dropdown-padded {
+    padding: 0.5rem !important;
+}
+
+.dropdown-scroll {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.unselectable {
+    -webkit-user-select: none; /* Safari */        
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */
+}
+
+.check-label {
+    cursor: pointer;
+    width: 100%;
+    justify-content: left !important;
+}
+
+.dropdown, .dropdown-menu  {
+    white-space: nowrap;
+}
+
+.custom-radio {
+    width: 100%;
+}
+
+nav {
+    z-index: 1000;
+}
+
+#rangeTimeLabel {
+ font-weight: bold;
+}
+
+h1 {
+    display: inline;
+    padding: 0;
+    margin: 0 0.5rem;
+    inline-size: 0;
+    font-size: x-large;
+}
+
+.dropdown-toggle:after {
+    margin-left: 0.5rem;
 }

@@ -3,7 +3,7 @@
 
 <head>
     <title>Encuesta de población activa | Visualización de datos abiertos</title>
-    <meta name="description" content="Trabjo de visualización de datos abiertos utilizando D3.js para la asignatira de Paradigmas avanzados de la interacción persona-ordenador"/>
+    <meta name="description" content="Trabjo de visualización de datos abiertos utilizando D3.js para la asignatira de Paradigmas avanzados de la interacción persona-ordenador" />
     <meta name="author" content="Agustín San Román Guzmán" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
@@ -23,8 +23,29 @@
 <body>
     <nav class="navbar navbar-dark bg-primary main-title">
         <a class="navbar-brand" href="#">
-            <img src="images/favicon.png" width="30" height="30" class="d-inline-block align-top" alt=""> Encuesta de población activa
+            <img src="images/favicon.png" width="30" height="30" class="d-inline-block align-top" alt="">
+            <h1>Encuesta de población activa</h1>
         </a>
+        <div class="form-inline">
+            <div class="dropdown keep-inside-clicks-open">
+                <button class="btn btn-dark btn-sm dropdown-toggle btn-margin" data-toggle="dropdown"><i class="fas fa-map-marker-alt"></i>
+                    <span id="region-nav-indicator">Total Nacional</span></button>
+                <div class="dropdown-menu dropdown-padded dropdown-scroll dropdown-big dropdown-menu-right">
+                    <div id="region-radio-menu-list">
+
+                    </div>
+                </div>
+            </div>
+            <div class="dropdown keep-inside-clicks-open">
+                <button class="btn btn-dark btn-sm dropdown-toggle btn-margin" data-toggle="dropdown"><i class="far fa-calendar-alt"></i>
+                    <span id="period-nav-indicator">Temporada T del año YYYY</span></button>
+                <div class="dropdown-menu dropdown-padded dropdown-scroll dropdown-big dropdown-menu-right">
+                    <div id="period-radio-menu-list">
+
+                    </div>
+                </div>
+            </div>
+        </div>
     </nav>
     <div class="map-container">
 
@@ -40,7 +61,7 @@
     <div class="region-tooltip" style="display: none;">España</div>
     <div class="map-help-icon" title="Ayuda"><i class="far fa-question-circle"></i></div>
     <div class="map-help-content transition" style="display: none; opacity: 0;">
-        <h2>Selector de Regiones</h2>
+        <h3>Selector de Regiones</h3>
         <p>Utilize este mapa para seleccionar la región de la que desea visualizar los datos.</p>
         <p>Si hace click fuera de cualquier región, se seleccionarán los datos a nivel nacional.</p>
         <p>También puede utilizar el menú de la zona superior derecha para seleccionar la región.</p>

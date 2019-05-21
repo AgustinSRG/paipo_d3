@@ -12,9 +12,9 @@ window.VisualizationPrototype = (function () {
     function VisualizationPrototype(mapData, ineData) {
         this.mapData = mapData;
         this.genders = ineData.genders;
-        this.regions = ineData.regions;
+        this.regions = ineData.regions.sort();
         this.sectors = ineData.sectors;
-        this.times = ineData.times.reverse();
+        this.times = ineData.times.slice().reverse();
         this.selectedRegion = null;
         this.mapHelpShown = false;
         this.selectedPeriod = this.times[this.times.length - 1];
@@ -22,32 +22,102 @@ window.VisualizationPrototype = (function () {
 
     VisualizationPrototype.prototype.init = function () {
         this.drawMap();
-        
+
         var app = this;
 
-        d3.select("#rangeTime")
-        .attr("min", 0)
-        .attr("max", this.times.length - 1)
-        .on("change", function () {
-            app.selectTime(app.times[d3.select(this).property("value")]);
-            app.updateTimeLabel();
-        })
-        .on("input", function () {
-            app.selectTime(app.times[d3.select(this).property("value")]);
-            app.updateTimeLabel();
-        });
+        /* Dropdown menu for regions */
 
+        var divsRadios = d3.select("#region-radio-menu-list")
+            .selectAll("div")
+            .data(this.regions)
+            .enter()
+            .append("div")
+            .attr("class", "form-group padded")
+            .append("div")
+            .attr("class", "custom-control custom-radio");
+
+        divsRadios.append("input")
+            .attr("class", "custom-control-input")
+            .attr("type", "radio")
+            .attr("id", function (d, i) {
+                return "region-radio-btn-" + toId(d);
+            })
+            .attr("name", "region-radio-btn")
+            .attr("value", function (d, i) {
+                return toId(d);
+            })
+            .on("change", function () {
+                app.selectRegion(d3.select("input[name='region-radio-btn']:checked").property("value"));
+            });
+
+        divsRadios.append("label")
+            .attr("for", function (d, i) {
+                return "region-radio-btn-" + toId(d);
+            })
+            .attr("class", "custom-control-label unselectable check-label")
+            .text(function (d) {
+                return d;
+            });
+
+        /* Select default region */
+
+        this.selectRegion(null);
+
+        /* Range control for time periods */
+
+        d3.select("#rangeTime")
+            .attr("min", 0)
+            .attr("max", this.times.length - 1)
+            .on("change", function () {
+                app.selectTime(app.times[d3.select(this).property("value")]);
+            })
+            .on("input", function () {
+                app.selectTime(app.times[d3.select(this).property("value")]);
+            });
+
+        /* Dropdown menu for time periods */
+
+        divsRadios = d3.select("#period-radio-menu-list")
+            .selectAll("div")
+            .data(this.times.slice().reverse())
+            .enter()
+            .append("div")
+            .attr("class", "form-group padded")
+            .append("div")
+            .attr("class", "custom-control custom-radio");
+
+        divsRadios.append("input")
+            .attr("class", "custom-control-input")
+            .attr("type", "radio")
+            .attr("id", function (d, i) {
+                return "period-radio-btn-" + toId(d);
+            })
+            .attr("name", "period-radio-btn")
+            .attr("value", function (d, i) {
+                return d;
+            })
+            .on("change", function () {
+                app.selectTime(d3.select("input[name='period-radio-btn']:checked").property("value"));
+                app.updateRangeTime();
+            });
+
+        divsRadios.append("label")
+            .attr("for", function (d, i) {
+                return "period-radio-btn-" + toId(d);
+            })
+            .attr("class", "custom-control-label unselectable check-label")
+            .text(function (d) {
+                var spl = d.toUpperCase().split("T");
+                return "Temporada " + spl[1] + " del año " + spl[0];
+            });
+
+        /* Update period to deafult */
         this.updateRangeTime();
-        this.updateTimeLabel();
+        this.selectTime(this.selectedPeriod);
     };
 
     VisualizationPrototype.prototype.updateRangeTime = function () {
         d3.select("#rangeTime").property("value", this.times.indexOf(this.selectedPeriod));
-    };
-
-    VisualizationPrototype.prototype.updateTimeLabel = function () {
-        var spl = this.selectedPeriod.split("T");
-        d3.select("#rangeTimeLabel").text("Temporada " + spl[1] + " del año " + spl[0]);
     };
 
     VisualizationPrototype.prototype.drawMap = function () {
@@ -90,11 +160,11 @@ window.VisualizationPrototype = (function () {
             }).on("click", function () {
                 app.selectRegion(null);
             });
-        
+
 
         // Regions
         svg.selectAll("path")
-            .data(SpainMapData.features)
+            .data(this.mapData.features)
             .enter()
             .append("path")
             .attr("d", function (d, i) {
@@ -125,14 +195,13 @@ window.VisualizationPrototype = (function () {
                 }
                 app.changeMapTooltip("España");
             })
-            .on("click", function() {
+            .on("click", function () {
                 var className = toId(d3.select(this).data()[0].properties.NAME_1);
                 app.selectRegion(className);
                 d3.event.stopPropagation();
-            })
-            ;
+            });
 
-            //Canarias
+        //Canarias
         svg.append("rect")
             .attr("x", 5)
             .attr("y", 390)
@@ -160,38 +229,38 @@ window.VisualizationPrototype = (function () {
                 }
                 app.changeMapTooltip("España");
             })
-            .on("click", function() {
+            .on("click", function () {
                 var className = toId("Islas Canarias");
                 app.selectRegion(className);
                 d3.event.stopPropagation();
             })
             ;
 
-            // Help
-            d3.select(".map-help-icon").on("click", function () {
-                if (app.mapHelpShown) {
-                    app.mapHelpShown = false;
-                    d3.select(".map-help-content").style("display", "none").style("opacity", 0);
-                } else {
-                    app.mapHelpShown = true;
-                    d3.select(".map-help-content").style("display", "block").style("opacity", 1);
-                }
-                d3.event.stopPropagation();
-            });
-            d3.select(".map-help-content").on("click", function () {
-                d3.event.stopPropagation();
-            });
-            d3.select(".close-map-help").on("click", function () {
+        // Help
+        d3.select(".map-help-icon").on("click", function () {
+            if (app.mapHelpShown) {
                 app.mapHelpShown = false;
                 d3.select(".map-help-content").style("display", "none").style("opacity", 0);
-                d3.event.stopPropagation();
-            });
-            d3.select(document).on("click", function () {
-                if (app.mapHelpShown) {
-                    app.mapHelpShown = false;
-                    d3.select(".map-help-content").style("display", "none").style("opacity", 0);
-                }
-            });
+            } else {
+                app.mapHelpShown = true;
+                d3.select(".map-help-content").style("display", "block").style("opacity", 1);
+            }
+            d3.event.stopPropagation();
+        });
+        d3.select(".map-help-content").on("click", function () {
+            d3.event.stopPropagation();
+        });
+        d3.select(".close-map-help").on("click", function () {
+            app.mapHelpShown = false;
+            d3.select(".map-help-content").style("display", "none").style("opacity", 0);
+            d3.event.stopPropagation();
+        });
+        d3.select(document).on("click", function () {
+            if (app.mapHelpShown) {
+                app.mapHelpShown = false;
+                d3.select(".map-help-content").style("display", "none").style("opacity", 0);
+            }
+        });
     };
 
     VisualizationPrototype.prototype.showMapTooltip = function () {
@@ -206,6 +275,18 @@ window.VisualizationPrototype = (function () {
         d3.select(".region-tooltip").text(text);
     };
 
+    VisualizationPrototype.prototype.findRegionName = function (region) {
+        if (!region) {
+            return "Total Nacional";
+        }
+        for (var i = 0; i < this.regions.length; i++) {
+            if (toId(this.regions[i]) === toId(region)) {
+                return this.regions[i];
+            }
+        }
+        return region;
+    };
+
     VisualizationPrototype.prototype.selectRegion = function (region) {
         this.selectedRegion = region;
         d3.selectAll(".region").attr("fill", function (d, i) {
@@ -216,21 +297,31 @@ window.VisualizationPrototype = (function () {
                 return colorNotSelected;
             }
         });
-        this.updateVisualizations();
+        d3.select("input[name='region-radio-btn'][value='" + (region || toId("Total Nacional")) + "']").property('checked', true);
+        d3.select("#region-nav-indicator").text(this.findRegionName(region));
     };
 
     VisualizationPrototype.prototype.selectTime = function (period) {
         this.selectedPeriod = period;
-        
+        d3.select("input[name='period-radio-btn'][value='" + (period) + "']").property('checked', true);
+        var spl = this.selectedPeriod.toUpperCase().split("T");
+        d3.select("#rangeTimeLabel").text("Temporada " + spl[1] + " del año " + spl[0]);
+        d3.select("#period-nav-indicator").text("Temporada " + spl[1] + " del año " + spl[0]);
     };
 
     VisualizationPrototype.prototype.updateVisualizations = function (region) {
+
     };
 
     return VisualizationPrototype;
 })();
 
 document.addEventListener("DOMContentLoaded", function (event) {
+    // Avoid dropdowns from closing
+    $(document).on('click.bs.dropdown.data-api', '.dropdown.keep-inside-clicks-open', function (e) {
+        e.stopPropagation();
+    });
+
     window.App = new VisualizationPrototype(SpainMapData, DatosPoblActiva);
     App.init();
 });
