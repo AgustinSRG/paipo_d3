@@ -27,6 +27,15 @@
             <h1>Encuesta de población activa</h1>
         </a>
         <div class="form-inline">
+                <div class="dropdown keep-inside-clicks-open">
+                        <button class="btn btn-dark btn-sm dropdown-toggle btn-margin" data-toggle="dropdown"><i class="fas fa-venus-mars"></i>
+                            <span id="gender-nav-indicator">Ambos sexos</span></button>
+                        <div class="dropdown-menu dropdown-padded dropdown-scroll dropdown-big dropdown-menu-right">
+                            <div id="gender-radio-menu-list">
+        
+                            </div>
+                        </div>
+                    </div>
             <div class="dropdown keep-inside-clicks-open">
                 <button class="btn btn-dark btn-sm dropdown-toggle btn-margin" data-toggle="dropdown"><i class="fas fa-map-marker-alt"></i>
                     <span id="region-nav-indicator">Total Nacional</span></button>
@@ -56,8 +65,8 @@
             <input type="range" class="custom-range" id="rangeTime" name="selected-time" step="1" min="0" max="8">
         </form>
     </div>
-    <div class="bars-graph-container">GRAFICO DE BARRAS</div>
-    <div class="pie-graph-container">GRAFICO PORCENTUAL</div>
+    <div class="bars-graph-container"></div>
+    <div class="pie-graph-container"></div>
     <div class="region-tooltip" style="display: none;">España</div>
     <div class="map-help-icon" title="Ayuda"><i class="far fa-question-circle"></i></div>
     <div class="map-help-content transition" style="display: none; opacity: 0;">

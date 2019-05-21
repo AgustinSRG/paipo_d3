@@ -204,3 +204,14 @@ h1 {
 .dropdown-toggle:after {
     margin-left: 0.5rem;
 }
+
+path.slice{
+	stroke-width:2px;
+}
+
+polyline{
+	opacity: .3;
+	stroke: black;
+	stroke-width: 2px;
+	fill: none;
+}
