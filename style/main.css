@@ -74,7 +74,7 @@ body {
     height: auto;
 }
 
-/* svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet" */
+/* Map */
 
 .svg-map {
     position: absolute;
@@ -86,7 +86,50 @@ body {
     height: calc(100% - 1rem);
     background-color: #f0f0f0;
     border-radius: 1rem;
+    cursor: pointer;
 }
+
+.region, .clickable {
+    cursor: pointer;
+}
+
+.region-tooltip {
+    position: fixed;
+    font-size: large;
+    background-color: black;
+    color: white;
+    padding: 0.1rem 0.5rem;
+    z-index: 100;
+}
+
+.map-help-icon {
+    position: fixed;
+    z-index: 10;
+    top: 4.7rem;
+    left: 1rem;
+    font-size: x-large;
+    color: #007bff;
+    cursor: pointer;
+}
+
+.map-help-content {
+    position: fixed;
+    z-index: 10;
+    top: 6.5rem;
+    left: 2.5rem;
+    padding: 0.5rem;
+    background-color: white;
+    border: solid 2px black;
+    border-radius: 1rem;
+}
+
+.transition {
+    transition: all .25s ease-in-out;
+    -moz-transition: all .25s ease-in-out;
+    -webkit-transition: all .25s 
+}
+
+/* Controls */
 
 .controls-container form {
     position: absolute;
