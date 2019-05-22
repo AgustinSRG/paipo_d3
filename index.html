@@ -15,6 +15,7 @@
     <script type="text/javascript" src="js/lib/jquery-3.4.1.min.js"></script>
     <script type="text/javascript" src="js/lib/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/lib/d3.min.js"></script>
+    <script type="text/javascript" src="js/lib/d3-tip.min.js"></script>
 
     <script type="text/javascript" src="js/data.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
@@ -52,7 +53,7 @@
     <div class="map-container">
     </div>
     <div class="region-tooltip" style="display: none;">España</div>
-    <div class="map-help-icon" title="Ayuda"><i class="far fa-question-circle"></i></div>
+    <div class="map-help-icon unselectable" title="Ayuda"><i class="far fa-question-circle"></i></div>
     <div class="map-help-content transition" style="display: none; opacity: 0;">
         <h3>Selector de Regiones</h3>
         <p>Utilize este mapa para seleccionar la región de la que desea visualizar los datos.</p>
@@ -71,6 +72,12 @@
 
     <!-- BARS GRAPH -->
     <div class="bars-graph-container"></div>
+    <div class="bars-help-icon unselectable" title="Ayuda"><i class="far fa-question-circle"></i></div>
+    <div class="bars-help-content transition" style="display: none; opacity: 0;">
+        <h3>Gráfico de barras</h3>
+        <p>En este gráfico puede ver los porcentajes de población activa en función del sector económico y el sexo.</p>
+        <p><button class="btn btn-primary close-bars-help">Listo</button></p>
+    </div>
 
     <!-- PIE CHART -->
     <div class="pie-graph-container"></div>
@@ -81,7 +88,7 @@
         </div>
     </div>
     <div title="Ambos sexos" class="gender-btn"><i class="fas fa-venus-mars"></i></div>
-    <div class="pie-help-icon" title="Ayuda"><i class="far fa-question-circle"></i></div>
+    <div class="pie-help-icon unselectable" title="Ayuda"><i class="far fa-question-circle"></i></div>
     <div class="pie-help-content transition" style="display: none; opacity: 0;">
         <h3>Distribución por Sectores</h3>
         <p>En este gráfico puede ver una distribución porcentual de la población activa en sectores</p>

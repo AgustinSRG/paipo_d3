@@ -19,6 +19,7 @@ window.VisualizationPrototype = (function () {
         this.selectedRegion = null;
         this.mapHelpShown = false;
         this.pieHelpShown = false;
+        this.barsHelpShown = false;
         this.selectedPeriod = this.times[this.times.length - 1];
         this.selectedGender = this.genders[0];
     }
@@ -155,6 +156,10 @@ window.VisualizationPrototype = (function () {
             if (app.mapHelpShown) {
                 app.mapHelpShown = false;
                 d3.select(".map-help-content").style("display", "none").style("opacity", 0);
+            }
+            if (app.barsHelpShown) {
+                app.barsHelpShown = false;
+                d3.select(".bars-help-content").style("display", "none").style("opacity", 0);
             }
         });
 
@@ -311,11 +316,31 @@ window.VisualizationPrototype = (function () {
         var svg = d3.select(".bars-graph-container")
             .append("svg")
             .attr("class", "svg-map")
-            .attr("viewBox", "0 0 960 450")
+            .attr("id", "bars-chart")
+            .attr("viewBox", "0 0 800 480")
             .attr("preserveAspectRatio", "xMidYMid meet");
 
+        var app = this;
 
-
+        // Help
+        d3.select(".bars-help-icon").on("click", function () {
+            if (app.barsHelpShown) {
+                app.barsHelpShown = false;
+                d3.select(".bars-help-content").style("display", "none").style("opacity", 0);
+            } else {
+                app.barsHelpShown = true;
+                d3.select(".bars-help-content").style("display", "block").style("opacity", 1);
+            }
+            d3.event.stopPropagation();
+        });
+        d3.select(".bars-help-content").on("click", function () {
+            d3.event.stopPropagation();
+        });
+        d3.select(".close-bars-help").on("click", function () {
+            app.barsHelpShown = false;
+            d3.select(".bars-help-content").style("display", "none").style("opacity", 0);
+            d3.event.stopPropagation();
+        });
     };
 
     VisualizationPrototype.prototype.drawPieChart = function () {
@@ -364,6 +389,139 @@ window.VisualizationPrototype = (function () {
             }
         }
         return dataSet;
+    };
+
+    VisualizationPrototype.prototype.getBarsData = function () {
+        var dataSet = [];
+        var labels = ["Agricultura", "Construcción", "Industria", "Servicios", "Parados de Corta Duración"];
+        var i = -1;
+        for (var sector in this.data) {
+            if (sector !== "Total") {
+                i++;
+                var val = null;
+                try {
+                    val = this.data[sector][this.selectedPeriod.toUpperCase()][this.findRegionName(this.selectedRegion)];
+                } catch (ex) {
+                    console.error(ex);
+                }
+                if (val) {
+                    dataSet.push({
+                        sector: labels[i],
+                        "Hombres": val["Hombres"] || 0,
+                        "Mujeres": val["Mujeres"] || 0,
+                        "Ambos sexos": val["Ambos sexos"] || 0,
+                    });
+                } else {
+                    dataSet.push({
+                        sector: labels[i],
+                        "Hombres": 0,
+                        "Mujeres": 0,
+                        "Ambos sexos": 0,
+                    });
+                }
+            }
+        }
+        return dataSet;
+    };
+
+    VisualizationPrototype.prototype.updateBarsChart = function () {
+        var data = this.getBarsData();
+        var keys = Object.keys(data[0]).slice(1);
+
+        var tip = d3.tip().html(d => d.value);
+
+        var margin = {
+            top: 40,
+            right: 80,
+            bottom: 50,
+            left: 80
+        };
+        var width = 800;
+        var height = 480;
+        var innerWidth = width - margin.left - margin.right;
+        var innerHeight = height - margin.top - margin.bottom;
+
+        var svg = d3.select('#bars-chart').text("");
+
+        var g = svg.append('g').attr('transform', `translate(${margin.left}, ${margin.top})`);
+
+        svg.call(tip)
+
+        var x0 = d3.scaleBand()
+            .rangeRound([0, innerWidth])
+            .paddingInner(.1);
+
+        var x1 = d3.scaleBand()
+            .padding(.05);
+
+        var y = d3.scaleLinear()
+            .rangeRound([innerHeight, 0]);
+
+        var z = d3.scaleOrdinal()
+            .range(['#91bfdb', '#fc8d59', '#ffffbf']);
+
+        x0.domain(data.map(d => d.sector));
+        x1.domain(keys).rangeRound([0, x0.bandwidth()]);
+        y.domain([0, d3.max(data, d => d3.max(keys, key => d[key]))]).nice();
+
+        g.append('g')
+            .selectAll('g')
+            .data(data)
+            .enter()
+            .append('g')
+            .attr('transform', d => 'translate(' + x0(d.sector) + ',0)')
+            .selectAll('rect')
+            .data(d => keys.map(key => { return { key: key, value: d[key] } }))
+            .enter().append('rect')
+            .attr('x', d => x1(d.key))
+            .attr('y', d => y(d.value))
+            .attr('width', x1.bandwidth())
+            .attr('height', d => innerHeight - y(d.value))
+            .attr('fill', d => z(d.key))
+            .on('mouseover', tip.show)
+            .on('mouseout', tip.hide)
+
+        g.append('g')
+            .attr('class', 'axis-bottom')
+            .attr("font-size", 16)
+            .attr('transform', 'translate(0,' + innerHeight + ')')
+            .call(d3.axisBottom(x0));
+
+        g.append('g')
+            .attr('class', 'axis-left')
+            .call(d3.axisLeft(y).ticks(null, 's'))
+            .append('text')
+            .attr('x', 10)
+            .attr('y', y(y.ticks().pop()) + 10)
+            .attr('dy', '0.32em')
+            .attr('fill', '#000')
+            .style('transform', 'rotate(-90deg)')
+            .attr('font-weight', 'bold')
+            .attr('font-size', 16)
+            .attr('text-anchor', 'end')
+            .text('%');
+
+        var legend = g.append('g')
+            .attr('font-family', 'sans-serif')
+            .attr('font-size', 16)
+            .attr('text-anchor', 'end')
+            .selectAll('g')
+            .data(keys.slice().reverse())
+            .enter().append('g')
+            .attr('transform', (d, i) => 'translate(0,' + i * 20 + ')');
+
+        legend.append('rect')
+            .attr('x', innerWidth - 17)
+            .attr('width', 14)
+            .attr('height', 14)
+            .attr('fill', z);
+
+        legend.append('text')
+            .attr('x', innerWidth - 32)
+            .attr('y', 6)
+            .attr("font-size", 16)
+            .attr('dy', '0.32em')
+            .text(d => d);
     };
 
     VisualizationPrototype.prototype.updatePieChart = function () {
@@ -425,7 +583,7 @@ window.VisualizationPrototype = (function () {
             });
 
             path.transition()
-                .duration(100)
+                .duration(150)
                 .attrTween('d', function (d) {
                     var interpolate = d3.interpolate(this._current, d);
                     this._current = interpolate(0);
@@ -565,7 +723,7 @@ window.VisualizationPrototype = (function () {
 
     VisualizationPrototype.prototype.updateVisualizations = function (region) {
         this.updatePieChart();
-
+        this.updateBarsChart();
     };
 
     return VisualizationPrototype;
