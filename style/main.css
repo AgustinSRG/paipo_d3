@@ -88,7 +88,6 @@ body {
     height: calc(100% - 1rem);
     background-color: #f0f0f0;
     border-radius: 1rem;
-    cursor: pointer;
 }
 
 .region, .clickable {
@@ -214,4 +213,46 @@ polyline{
 	stroke: black;
 	stroke-width: 2px;
 	fill: none;
+}
+
+/* Pie chart */
+
+.pie-tooltip {
+    position: fixed;
+    background-color: black;
+    color: white;
+    padding: 0.1rem 0.5rem;
+    z-index: 100;
+    font-size: large;
+}
+
+.gender-btn {
+    position: fixed;
+    right: 1.5rem;
+    top: calc(50% + 0.8rem);
+    z-index: 10;
+    font-size: xx-large;
+    cursor: pointer;
+    color: #007bff;
+}
+
+.pie-help-icon {
+    position: fixed;
+    z-index: 10;
+    top: calc(50% + 0.8rem);
+    left: calc(50% + 1rem);
+    font-size: x-large;
+    color: #007bff;
+    cursor: pointer;
+}
+
+.pie-help-content {
+    position: fixed;
+    z-index: 10;
+    top: calc(50% + 2.5rem);
+    left: calc(50% + 2rem);
+    padding: 0.5rem;
+    background-color: white;
+    border: solid 2px black;
+    border-radius: 1rem;
 }

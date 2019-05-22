@@ -27,15 +27,6 @@
             <h1>Encuesta de población activa</h1>
         </a>
         <div class="form-inline">
-                <div class="dropdown keep-inside-clicks-open">
-                        <button class="btn btn-dark btn-sm dropdown-toggle btn-margin" data-toggle="dropdown"><i class="fas fa-venus-mars"></i>
-                            <span id="gender-nav-indicator">Ambos sexos</span></button>
-                        <div class="dropdown-menu dropdown-padded dropdown-scroll dropdown-big dropdown-menu-right">
-                            <div id="gender-radio-menu-list">
-        
-                            </div>
-                        </div>
-                    </div>
             <div class="dropdown keep-inside-clicks-open">
                 <button class="btn btn-dark btn-sm dropdown-toggle btn-margin" data-toggle="dropdown"><i class="fas fa-map-marker-alt"></i>
                     <span id="region-nav-indicator">Total Nacional</span></button>
@@ -47,7 +38,7 @@
             </div>
             <div class="dropdown keep-inside-clicks-open">
                 <button class="btn btn-dark btn-sm dropdown-toggle btn-margin" data-toggle="dropdown"><i class="far fa-calendar-alt"></i>
-                    <span id="period-nav-indicator">Temporada T del año YYYY</span></button>
+                    <span id="period-nav-indicator">Trimestre T del año YYYY</span></button>
                 <div class="dropdown-menu dropdown-padded dropdown-scroll dropdown-big dropdown-menu-right">
                     <div id="period-radio-menu-list">
 
@@ -56,17 +47,10 @@
             </div>
         </div>
     </nav>
-    <div class="map-container">
 
+    <!-- MAP -->
+    <div class="map-container">
     </div>
-    <div class="controls-container">
-        <form>
-            <label id="rangeTimeLabel" for="rangeTime">Temporada 1 del año 2019</label>
-            <input type="range" class="custom-range" id="rangeTime" name="selected-time" step="1" min="0" max="8">
-        </form>
-    </div>
-    <div class="bars-graph-container"></div>
-    <div class="pie-graph-container"></div>
     <div class="region-tooltip" style="display: none;">España</div>
     <div class="map-help-icon" title="Ayuda"><i class="far fa-question-circle"></i></div>
     <div class="map-help-content transition" style="display: none; opacity: 0;">
@@ -75,6 +59,34 @@
         <p>Si hace click fuera de cualquier región, se seleccionarán los datos a nivel nacional.</p>
         <p>También puede utilizar el menú de la zona superior derecha para seleccionar la región.</p>
         <p><button class="btn btn-primary close-map-help">Listo</button></p>
+    </div>
+
+    <!-- TIME SLIDER -->
+    <div class="controls-container">
+        <form>
+            <label id="rangeTimeLabel" for="rangeTime">Trimestre 1 del año 2019</label>
+            <input type="range" class="custom-range" id="rangeTime" name="selected-time" step="1" min="0" max="8">
+        </form>
+    </div>
+
+    <!-- BARS GRAPH -->
+    <div class="bars-graph-container"></div>
+
+    <!-- PIE CHART -->
+    <div class="pie-graph-container"></div>
+    <div class="pie-tooltip">
+        <div class="label">
+        </div>
+        <div class="percent">
+        </div>
+    </div>
+    <div title="Ambos sexos" class="gender-btn"><i class="fas fa-venus-mars"></i></div>
+    <div class="pie-help-icon" title="Ayuda"><i class="far fa-question-circle"></i></div>
+    <div class="pie-help-content transition" style="display: none; opacity: 0;">
+        <h3>Distribución por Sectores</h3>
+        <p>En este gráfico puede ver una distribución porcentual de la población activa en sectores</p>
+        <p>Haciendo click en el icono de la esquina superior derecha del gráfico puede ver las distribuicones en función del sexo.</p>
+        <p><button class="btn btn-primary close-pie-help">Listo</button></p>
     </div>
 </body>
 
