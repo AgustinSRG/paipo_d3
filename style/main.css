@@ -293,3 +293,8 @@ polyline{
     border: solid 2px black;
     border-radius: 1rem;
 }
+
+.bars-tip {
+    font-size: large;
+    pointer-events: none;
+}

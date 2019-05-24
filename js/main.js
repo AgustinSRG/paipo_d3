@@ -428,7 +428,7 @@ window.VisualizationPrototype = (function () {
         var data = this.getBarsData();
         var keys = Object.keys(data[0]).slice(1);
 
-        var tip = d3.tip().html(d => d.value);
+        var tooltip = d3.select('.pie-tooltip');
 
         var margin = {
             top: 40,
@@ -444,8 +444,6 @@ window.VisualizationPrototype = (function () {
         var svg = d3.select('#bars-chart').text("");
 
         var g = svg.append('g').attr('transform', `translate(${margin.left}, ${margin.top})`);
-
-        svg.call(tip)
 
         var x0 = d3.scaleBand()
             .rangeRound([0, innerWidth])
@@ -478,8 +476,18 @@ window.VisualizationPrototype = (function () {
             .attr('width', x1.bandwidth())
             .attr('height', d => innerHeight - y(d.value))
             .attr('fill', d => z(d.key))
-            .on('mouseover', tip.show)
-            .on('mouseout', tip.hide)
+            .on('mouseover', function (d) {
+                tooltip.select('.label').html(d.key);
+                tooltip.select('.percent').html(d.value + '%');
+                tooltip.style('display', 'block');
+            })
+            .on('mouseout', function () {
+                tooltip.style('display', 'none');
+            })
+            .on('mousemove', function (d) {
+                tooltip.style('top', (d3.event.pageY + 10) + 'px')
+                    .style('left', (d3.event.pageX + 10) + 'px');
+            });
 
         g.append('g')
             .attr('class', 'axis-bottom')
