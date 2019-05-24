@@ -443,7 +443,7 @@ window.VisualizationPrototype = (function () {
 
         var svg = d3.select('#bars-chart').text("");
 
-        var g = svg.append('g').attr('transform', `translate(${margin.left}, ${margin.top})`);
+        var g = svg.append('g').attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
 
         var x0 = d3.scaleBand()
             .rangeRound([0, innerWidth])
@@ -458,24 +458,28 @@ window.VisualizationPrototype = (function () {
         var z = d3.scaleOrdinal()
             .range(['#91bfdb', '#fc8d59', '#ffffbf']);
 
-        x0.domain(data.map(d => d.sector));
+        x0.domain(data.map(function (d) {return d.sector;}));
         x1.domain(keys).rangeRound([0, x0.bandwidth()]);
-        y.domain([0, d3.max(data, d => d3.max(keys, key => d[key]))]).nice();
+        y.domain([0, d3.max(data, function (d) {
+            return d3.max(keys, function (key) {
+                return d[key];
+            })
+        })]).nice();
 
         g.append('g')
             .selectAll('g')
             .data(data)
             .enter()
             .append('g')
-            .attr('transform', d => 'translate(' + x0(d.sector) + ',0)')
+            .attr('transform', function (d) {return 'translate(' + x0(d.sector) + ',0)';})
             .selectAll('rect')
-            .data(d => keys.map(key => { return { key: key, value: d[key] } }))
+            .data(function (d) {return keys.map(function (key) { return { key: key, value: d[key] } })})
             .enter().append('rect')
-            .attr('x', d => x1(d.key))
-            .attr('y', d => y(d.value))
+            .attr('x', function (d) {return x1(d.key)})
+            .attr('y', function (d) {return y(d.value)})
             .attr('width', x1.bandwidth())
-            .attr('height', d => innerHeight - y(d.value))
-            .attr('fill', d => z(d.key))
+            .attr('height', function (d) {return innerHeight - y(d.value)})
+            .attr('fill', function (d) { return z(d.key)})
             .on('mouseover', function (d) {
                 tooltip.select('.label').html(d.key);
                 tooltip.select('.percent').html(d.value + '%');
@@ -516,7 +520,7 @@ window.VisualizationPrototype = (function () {
             .selectAll('g')
             .data(keys.slice().reverse())
             .enter().append('g')
-            .attr('transform', (d, i) => 'translate(0,' + i * 20 + ')');
+            .attr('transform', function (d, i) { return 'translate(0,' + i * 20 + ')'});
 
         legend.append('rect')
             .attr('x', innerWidth - 17)
@@ -529,7 +533,7 @@ window.VisualizationPrototype = (function () {
             .attr('y', 6)
             .attr("font-size", 16)
             .attr('dy', '0.32em')
-            .text(d => d);
+            .text(function (d) { return d});
     };
 
     VisualizationPrototype.prototype.updatePieChart = function () {
